@@ -22,7 +22,7 @@ applications.createModal(/* customId: string, title: string */) // return ModalB
 # Options
 ### ButtonOptions:
 Key | Type
-- | -
+---- | -----
 customId?| string
 url?|string
 label?| string
@@ -32,7 +32,7 @@ disable?|boolean
     
 ### SelectMenuOptions:
 Key | Type
-- | -
+----- | ----
 arrOptions| Array({ label?:string, description?:string, emoji?:string, value:string})
 disable?| boolean
 placeholder?| string
@@ -41,7 +41,7 @@ max?|numbe
 
 ### TextInputOptions:
 Key | Type
-- | -
+----- | -----
 label?|string
 max?|number
 min?|number 
