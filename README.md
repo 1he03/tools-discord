@@ -1,4 +1,4 @@
-## Update 0.0.5
+## Update 0.0.6
 # Install
 ```
 npm install tools-discord --save
