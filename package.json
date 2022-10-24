@@ -1,0 +1,17 @@
+{
+  "name": "tools-discord",
+  "version": "0.0.4",
+  "description": "tools discord",
+  "main": "index.js",
+  "types": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Hlever",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.4.0"
+  },
+  "devDependencies": {}
+}
