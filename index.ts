@@ -1,5 +1,5 @@
 import {ButtonBuilder, SelectMenuBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType, ButtonStyle, 
-    SelectMenuOptionBuilder, SelectMenuComponentOptionData, Channel, Client, Message, AnyComponentBuilder
+    SelectMenuComponentOptionData, Channel, Client, Message, AnyComponentBuilder,
 } from 'discord.js';
 
 async function fetchChannel(client, id, cache) : Promise<Channel>
@@ -91,8 +91,7 @@ interface ButtonOptions{
     disable: boolean
 }
 interface SelectMenuOptions{
-    //arrOptions: {label?:string, description?:string, emoji?:string, value:string}[],
-    arrOptions: SelectMenuComponentOptionData,
+    arrOptions: [SelectMenuComponentOptionData],
     disable: boolean,
     placeholder?: string,
     min?: number,

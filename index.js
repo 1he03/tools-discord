@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.applications = exports.Fetch = void 0;
-var _a = require("discord.js"), ButtonBuilder = _a.ButtonBuilder, SelectMenuBuilder = _a.SelectMenuBuilder, ActionRowBuilder = _a.ActionRowBuilder, ModalBuilder = _a.ModalBuilder, TextInputBuilder = _a.TextInputBuilder, TextInputStyle = _a.TextInputStyle;
+var discord_js_1 = require("discord.js");
 function fetchChannel(client, id, cache) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -70,12 +70,16 @@ var Fetch = /** @class */ (function () {
                     case 0: return [4 /*yield*/, fetchChannel(this.client, channelId, cache)];
                     case 1:
                         channel = _a.sent();
-                        if (!channel) return [3 /*break*/, 3];
-                        return [4 /*yield*/, channel.messages.fetch(messageId, { cache: cache })["catch"](function () { return false; })];
+                        if (!channel) return [3 /*break*/, 5];
+                        if (!(channel.type == discord_js_1.ChannelType.GuildText)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, channel.messages.fetch({ message: messageId, cache: cache })["catch"](function () { return false; })];
                     case 2:
                         message = _a.sent();
                         return [2 /*return*/, message ? message : false];
                     case 3: return [2 /*return*/, false];
+                    case 4: return [3 /*break*/, 6];
+                    case 5: return [2 /*return*/, false];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -86,13 +90,13 @@ exports.Fetch = Fetch;
 exports.applications = {
     createButton: function (options) {
         if (!options.style)
-            options.style = "Primary";
-        var button = new ButtonBuilder();
+            options.style = discord_js_1.ButtonStyle.Primary;
+        var button = new discord_js_1.ButtonBuilder();
         button.setStyle(options.style);
-        if (options.style == "Link")
-            button.setURL(options.url);
+        if (options.style == discord_js_1.ButtonStyle.Link)
+            button.setURL(options.url || "");
         else
-            button.setCustomId(options.customId);
+            button.setCustomId(options.customId || "");
         if (options.label)
             button.setLabel(options.label);
         if (options.emoji)
@@ -102,7 +106,7 @@ exports.applications = {
         return button;
     },
     createSelectMenu: function (customId, options) {
-        var selectMenu = new SelectMenuBuilder();
+        var selectMenu = new discord_js_1.SelectMenuBuilder();
         selectMenu.setCustomId(customId);
         if (options.arrOptions)
             selectMenu.addOptions(options.arrOptions);
@@ -117,28 +121,21 @@ exports.applications = {
         return selectMenu;
     },
     createActionRow: function (components) {
-        var row = new ActionRowBuilder();
-        if (components)
-            if (components.constructor != Array)
-                row.addComponents(components);
-            else
-                for (var _i = 0, components_1 = components; _i < components_1.length; _i++) {
-                    var component = components_1[_i];
-                    row.addComponents(component);
-                }
+        var row = new discord_js_1.ActionRowBuilder();
+        row.addComponents(components);
         return row;
     },
     createModal: function (customId, title) {
-        var modal = new ModalBuilder();
+        var modal = new discord_js_1.ModalBuilder();
         modal.setCustomId(customId).setTitle(title);
         return modal;
     },
     createTextInput: function (customId, options) {
         if (!options.style)
             options.style = "Short";
-        var input = new TextInputBuilder();
+        var input = new discord_js_1.TextInputBuilder();
         input.setCustomId(customId);
-        input.setStyle(TextInputStyle[options.style]);
+        input.setStyle(discord_js_1.TextInputStyle[options.style]);
         if (options.isRequired)
             input.setRequired(options.isRequired);
         if (options.placeholder)
