@@ -1,6 +1,6 @@
 {
   "name": "tools-discord",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "tools discord",
   "main": "index.js",
   "types": "index.ts",
