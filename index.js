@@ -38,26 +38,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.applications = exports.Fetch = void 0;
 var _a = require("discord.js"), ButtonBuilder = _a.ButtonBuilder, SelectMenuBuilder = _a.SelectMenuBuilder, ActionRowBuilder = _a.ActionRowBuilder, ModalBuilder = _a.ModalBuilder, TextInputBuilder = _a.TextInputBuilder, TextInputStyle = _a.TextInputStyle;
+function fetchChannel(client, id, cache) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, client.channels.fetch(id, { cache: cache })["catch"](function () { return false; })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
 var Fetch = /** @class */ (function () {
     function Fetch(client) {
         this.client = client;
     }
-    Fetch.prototype.fetchChannel = function (id, cache) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.channels.fetch(id, { cache: cache })["catch"](function () { return false; })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
+    Fetch.prototype.getChannel = function (id, cache) {
+        if (cache === void 0) { cache = false; }
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetchChannel(this.client, id, cache)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); });
     };
-    Fetch.prototype.fetchMessage = function (channelId, messageId, cache) {
+    Fetch.prototype.getMessage = function (channelId, messageId, cache) {
+        if (cache === void 0) { cache = false; }
         return __awaiter(this, void 0, void 0, function () {
             var channel, message;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.fetchChannel(channelId, cache)];
+                    case 0: return [4 /*yield*/, fetchChannel(this.client, channelId, cache)];
                     case 1:
                         channel = _a.sent();
                         if (!channel) return [3 /*break*/, 3];
@@ -69,24 +79,6 @@ var Fetch = /** @class */ (function () {
                 }
             });
         });
-    };
-    Fetch.prototype.getChannel = function (id, cache) {
-        if (cache === void 0) { cache = false; }
-        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, this.fetchChannel(id, cache)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        }); });
-    };
-    Fetch.prototype.getMessage = function (channelId, messageId, cache) {
-        if (cache === void 0) { cache = false; }
-        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, this.fetchMessage(channelId, messageId, cache)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        }); });
     };
     return Fetch;
 }());

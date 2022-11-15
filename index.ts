@@ -1,47 +1,48 @@
-const {ButtonBuilder, SelectMenuBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle} = require("discord.js");
+import {ButtonBuilder, SelectMenuBuilder, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, ChannelType, ButtonStyle, 
+    SelectMenuOptionBuilder, SelectMenuComponentOptionData, Channel, Client, Message, AnyComponentBuilder
+} from 'discord.js';
+
+async function fetchChannel(client, id, cache) : Promise<Channel>
+{
+    return await client.channels.fetch(id,{cache}).catch(()=> { return false });
+}
 
 export class Fetch{
-    private client:import("discord.js").Client;
-    constructor(client: import("discord.js").Client)
+    private client:Client;
+    constructor(client: Client)
     {
         this.client = client;
     }
-    private async fetchChannel(id, cache) : Promise<import("discord.js").Channel | boolean | any>
+    public async getChannel(id: string, cache:boolean = false) : Promise<Channel | boolean>
+    { return await fetchChannel(this.client, id, cache) }
+    public async getMessage(channelId: string, messageId: string, cache:boolean = false) : Promise<Message | boolean>
     {
-        return await this.client.channels.fetch(id,{cache}).catch(()=> { return false });
-    }
-    
-    private async fetchMessage(channelId, messageId, cache)  : Promise<import("discord.js").Message | any>
-    {
-        let channel = await this.fetchChannel(channelId, cache);
+        let channel = await fetchChannel(this.client, channelId, cache);
         if(channel)
         {
-            let message = await channel.messages.fetch(messageId,{cache}).catch(()=> { return false });
-            return message ? message : false;
+            if(channel.type == ChannelType.GuildText)
+            {
+                let message = await channel.messages.fetch({message:messageId, cache}).catch(()=> { return false });
+                return message ? message : false;
+            } else return false;
         }else return false;
     }
-
-    public async getChannel(id: string, cache:boolean = false) : Promise<import("discord.js").Channel>
-    { return await this.fetchChannel(id, cache) }
-
-    public async getMessage(channelId: string, messageId: string, cache:boolean = false) : Promise<import("discord.js").Message>
-    { return await this.fetchMessage(channelId, messageId, cache) }
 }
 
 export let applications = {
-    createButton(options: ButtonOptions) : import("discord.js").ButtonBuilder
+    createButton(options: ButtonOptions) : ButtonBuilder
     {
-        if(!options.style) options.style = "Primary";
+        if(!options.style) options.style = ButtonStyle.Primary;
         let button = new ButtonBuilder();
         button.setStyle(options.style);
-        if(options.style == "Link") button.setURL(options.url);
-        else button.setCustomId(options.customId);
+        if(options.style == ButtonStyle.Link) button.setURL(options.url || "");
+        else button.setCustomId(options.customId || "");
         if(options.label) button.setLabel(options.label);
         if(options.emoji) button.setEmoji(options.emoji);
         if(options.disable) button.setDisabled(options.disable);
         return button;
     },
-    createSelectMenu(customId: string, options: SelectMenuOptions) : import("discord.js").SelectMenuBuilder
+    createSelectMenu(customId: string, options: SelectMenuOptions) : SelectMenuBuilder
     {
         let selectMenu = new SelectMenuBuilder();
         selectMenu.setCustomId(customId);
@@ -52,20 +53,19 @@ export let applications = {
         if(options.placeholder) selectMenu.setPlaceholder(options.placeholder);
         return selectMenu;
     },
-    createActionRow(components: Components) : import("discord.js").ActionRowBuilder
+    createActionRow(components: AnyComponentBuilder) : ActionRowBuilder
     {
         let row = new ActionRowBuilder();
-        if(components) if(components.constructor != Array) row.addComponents(components);
-        else for(let component of components) row.addComponents(component);
+        row.addComponents(components);
         return row;
     },
-    createModal(customId: string, title: string) : import("discord.js").ModalBuilder
+    createModal(customId: string, title: string) : ModalBuilder
     {
         let modal = new ModalBuilder();
         modal.setCustomId(customId).setTitle(title);
         return modal;
     },
-    createTextInput(customId: string, options: TextInputOptions) : import("discord.js").TextInputBuilder
+    createTextInput(customId: string, options: TextInputOptions) : TextInputBuilder
     {
         if(!options.style) options.style = "Short";
         let input = new TextInputBuilder();
@@ -87,11 +87,12 @@ interface ButtonOptions{
     url?: string, 
     label?: string, 
     emoji?: string, 
-    style: "Link" | "Primary" | "Secondary" | "Success" | "Danger",
+    style: ButtonStyle,
     disable: boolean
 }
 interface SelectMenuOptions{
-    arrOptions: {label?:string, description?:string, emoji?:string, value:string}[],
+    //arrOptions: {label?:string, description?:string, emoji?:string, value:string}[],
+    arrOptions: SelectMenuComponentOptionData,
     disable: boolean,
     placeholder?: string,
     min?: number,
@@ -106,6 +107,3 @@ interface TextInputOptions{
     style: "Short" | "Paragraph", 
     isRequired: boolean
 }
-
-type Components = import("discord.js").ButtonBuilder | import("discord.js").SelectMenuBuilder | import("discord.js").TextInputBuilder | 
-[ import("discord.js").SelectMenuBuilder | import("discord.js").ButtonBuilder | import("discord.js").TextInputBuilder ];
